@@ -1,0 +1,24 @@
+{
+  "name": "senal-celular",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Medidor en tiempo real de dBm y frecuencia de la red celular (UI web + plugin nativo Android vía Capacitor).",
+  "scripts": {
+    "dev": "npx --yes serve www -l 5173",
+    "test": "node --test",
+    "android:setup": "node scripts/setup-android.mjs",
+    "android:sync": "npx cap sync android",
+    "android:open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

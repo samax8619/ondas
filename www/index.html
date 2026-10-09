@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
+  <title>Señal celular en vivo</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div>
+        <h1>Señal celular</h1>
+        <p class="sub" id="sourceLabel">Cargando…</p>
+      </div>
+      <span class="badge" id="modeBadge" data-mode="none">—</span>
+    </header>
+
+    <div class="notice" id="notice" role="status" hidden></div>
+
+    <section class="card hero" aria-labelledby="heroLabel">
+      <div class="hero-main">
+        <span class="k" id="heroLabel">Intensidad de señal</span>
+        <p class="hero-value"><span id="dbmValue">—</span><span class="hero-unit" id="dbmUnit">dBm</span></p>
+        <p class="quality" id="quality"><span class="glyph" id="qualityGlyph" aria-hidden="true"></span><span id="qualityLabel">Sin datos</span></p>
+      </div>
+      <div class="hero-side">
+        <span class="tech" id="techLabel">—</span>
+        <span class="bars" id="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="operator" id="operatorLabel"></span>
+      </div>
+    </section>
+
+    <section class="stats" id="stats" aria-label="Detalle de la celda">
+      <div class="card stat"><span class="k"></span><span class="v">—</span></div>
+      <div class="card stat"><span class="k"></span><span class="v">—</span></div>
+      <div class="card stat"><span class="k"></span><span class="v">—</span></div>
+      <div class="card stat"><span class="k"></span><span class="v">—</span></div>
+      <div class="card stat"><span class="k"></span><span class="v">—</span></div>
+      <div class="card stat"><span class="k"></span><span class="v">—</span></div>
+    </section>
+
+    <section class="card chart-card" aria-labelledby="chartTitle">
+      <div class="chart-head">
+        <h2 id="chartTitle">Señal en el tiempo</h2>
+        <div class="seg" role="group" aria-label="Ventana de tiempo">
+          <button type="button" data-window="30" aria-pressed="false">30 s</button>
+          <button type="button" data-window="120" aria-pressed="true">2 min</button>
+          <button type="button" data-window="600" aria-pressed="false">10 min</button>
+        </div>
+      </div>
+      <div class="chart-box">
+        <canvas id="chart" role="img" aria-label="Gráfica de señal en tiempo real">
+          Tu navegador no soporta canvas. Usa la vista de tabla de abajo.
+        </canvas>
+      </div>
+      <p class="session" id="sessionStats">Sin muestras todavía</p>
+      <details class="table-view" id="tableView">
+        <summary>Ver tabla de las últimas muestras</summary>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Hora</th><th>dBm</th><th>Tec.</th><th>Banda</th><th>Canal</th><th>MHz</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section class="card controls" aria-label="Controles">
+      <label class="field">
+        <span class="k">Fuente de datos</span>
+        <select id="sourceSelect"></select>
+      </label>
+      <div class="row">
+        <button type="button" class="btn primary" id="toggleBtn">Iniciar medición</button>
+        <button type="button" class="btn" id="exportBtn" disabled>Exportar CSV</button>
+        <button type="button" class="btn" id="clearBtn" disabled>Limpiar</button>
+      </div>
+    </section>
+
+    <section class="card perms" aria-labelledby="permsTitle">
+      <h2 id="permsTitle">Permisos</h2>
+      <ul class="perm-list">
+        <li><span>Señal del módem <small>(READ_PHONE_STATE + ubicación precisa, solo Android nativo)</small></span><span class="chip" id="permNative">—</span></li>
+        <li><span>Ubicación <small>(opcional: solo para etiquetar el CSV)</small></span><span class="chip" id="permGeo">—</span></li>
+        <li><span>Pantalla encendida <small>(Screen Wake Lock, no pide permiso)</small></span><span class="chip" id="permWake">—</span></li>
+      </ul>
+      <label class="check"><input type="checkbox" id="geoToggle"> Etiquetar muestras con mi ubicación</label>
+      <button type="button" class="btn" id="permBtn" hidden>Conceder permisos del módem</button>
+    </section>
+
+    <details class="card limits" id="limits">
+      <summary>¿Por qué un navegador no puede medir dBm?</summary>
+      <p>Ninguna API web (ni en Chrome, ni en Safari, ni en Firefox) expone la potencia recibida (RSRP/RSSI) ni la frecuencia del módem celular. El navegador solo ve la red como “un enlace con cierta latencia y velocidad estimadas”.</p>
+      <p>Para leer dBm y canal hace falta una app nativa. Esta interfaz está hecha para funcionar dentro de un contenedor Capacitor en Android, donde un plugin lee <code>TelephonyManager</code> y envía los datos a esta misma pantalla. Los detalles están en el README.</p>
+    </details>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

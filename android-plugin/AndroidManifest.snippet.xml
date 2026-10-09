@@ -1,0 +1,15 @@
+<!--
+  Añade esto dentro de <manifest> en android/app/src/main/AndroidManifest.xml,
+  justo antes de <application>.
+-->
+
+<!-- Estado del teléfono: necesario para leer la señal del módem -->
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+<!-- Android trata la identidad de la celda (canal, PCI) como dato de ubicación.
+     Desde Android 12 hay que declarar las dos. -->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+<!-- Que la app pueda instalarse también en tablets sin módem (mostrará el aviso NO_TELEPHONY) -->
+<uses-feature android:name="android.hardware.telephony" android:required="false" />
